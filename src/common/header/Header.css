@@ -1,0 +1,14 @@
+body{
+    margin:0;
+    padding:0;
+}
+
+.header {
+    text-align: left;
+    padding: 1rem;
+    background: #000;
+    color: #ffffff;
+    font-size:18px;
+    text-transform: capitalize;
+    background-color: #263238;
+}
