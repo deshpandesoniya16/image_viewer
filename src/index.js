@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import Profile from './screens/profile/profile'
 
-ReactDOM.render(
-    <span>
-        Image Viewer
-    </span>, 
-    document.getElementById('root')
-);
+import * as serviceWorker from './serviceWorker';
+
+ReactDOM.render(<Profile />, document.getElementById('root'));
+
+serviceWorker.unregister();
