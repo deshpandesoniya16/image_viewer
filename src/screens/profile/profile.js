@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -9,15 +9,25 @@ import './profile.css';
 import Paper from '@material-ui/core/Paper';
 // import Box from '@material-ui/core/Box';
 // import Button from '@material-ui/core/Button';
-import profiledata from '../../common/profile_data';
+// import profiledata from '../../common/profile_data';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-
-
+import { withStyles } from '@material-ui/core/styles';
+// import Button from '@material-ui/core/Button';
+// import Dialog from '@material-ui/core/Dialog';
+// import MuiDialogTitle from '@material-ui/core/DialogTitle';
+// import MuiDialogContent from '@material-ui/core/DialogContent';
+// // import MuiDialogActions from '@material-ui/core/DialogActions';
+// import IconButton from '@material-ui/core/IconButton';
+// import CloseIcon from '@material-ui/icons/Close';
+import Modal from 'react-modal';
+import ImageDetailsSection from './imageDetailsSection/ImageDetailsSection'
 
 const styles = theme => ({
     root: {
       flexGrow: 1,
+      margin: 0,
+      padding: theme.spacing(2),
     },
     paper: {
       padding: theme.spacing(2),
@@ -28,9 +38,61 @@ const styles = theme => ({
         margin: 20,
         width: 100,
         height: 100,
-      }
+      },
+      smallDp:{
+        width: 1,
+        height: 1,
+      },
+      closeButton: {
+        position: 'absolute',
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: theme.palette.grey[500],
+      },
+      // smallDp: {
+      //   width: 79px,
+      //   height: 82px,
+      //  },
   });
-
+  // const styles = theme => ({
+  //   root: {
+  //     margin: 0,
+  //     padding: theme.spacing(2),
+  //   },
+  //   closeButton: {
+  //     position: 'absolute',
+  //     right: theme.spacing(1),
+  //     top: theme.spacing(1),
+  //     color: theme.palette.grey[500],
+  //   },
+  // });
+  
+  // const DialogTitle = withStyles(styles)(props => {
+  //   const { children, classes, onClose } = props;
+  //   return (
+  //     <MuiDialogTitle disableTypography className={classes.root}>
+  //       <Typography variant="h6">{children}</Typography>
+  //       {onClose ? (
+  //         <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+  //           <CloseIcon />
+  //         </IconButton>
+  //       ) : null}
+  //     </MuiDialogTitle>
+  //   );
+  // });
+  
+  // const DialogContent = withStyles(theme => ({
+  //   root: {
+  //     padding: theme.spacing(2),
+  //   },
+  // }))(MuiDialogContent);
+  
+  // const DialogActions = withStyles(theme => ({
+  //   root: {
+  //     margin: 0,
+  //     padding: theme.spacing(1),
+  //   },
+  // }))(MuiDialogActions);
 
 
 class Profile extends Component {
@@ -45,39 +107,40 @@ class Profile extends Component {
       media:'',
       follows:'',
       follow_by:'',
+      select_image:'',
+      select_image_text:'',
+      select_image_tags:'',
+      select_image_likes:'',
+      currentPost:'',
+      open: false,
+      detailsModalIsOpen: false
     }
-    
-    
   }
 
+
+  handleClickOpen = (selectedId) => {
+    this.setState({detailsModalIsOpen:true});
+    // let selectedPicData = [];
+    // for (let star of this.state.profileData) {
+    //     if (star.id === selectedId) {
+    //       selectedPicData.push(star.images);   
+    //       selectedPicData.push(star.caption);   
+    //       selectedPicData.push(star.likes);   
+    //       selectedPicData.push(star.tags);        
+    //     }        
+    // }
+    // this.setState({ select_image : selectedPicData[0].standard_resolution});
+    // this.setState({ select_image_text : selectedPicData[1]});
+    // this.setState({ select_image_tags : selectedPicData[2]});
+    // this.setState({ select_image_likes : selectedPicData[3]});
+    this.setState({ currentPost : selectedId});
+  };
+
+  handleClose = () => {
+    this.setState({ detailsModalIsOpen: false });
+  };
+
   componentWillMount() {
-    //Get User Infomration 
-    // let dataUserInfo = null;
-    // let xhrUserInfo = new XMLHttpRequest();
-    // // let that = this;
-    // xhrUserInfo.addEventListener("readystatechange", function () {
-    //   if (this.readyState === 4) {
-    //     this.setState({ userInfo: JSON.parse(this.responseText).data });
-    //   }
-    // })
-    // xhrUserInfo.open("GET", "https://api.instagram.com/v1/users/self/?access_token=8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
-    // xhrUserInfo.send(dataUserInfo);
-
-    //Get Profile Data 
-    // let dataProfileData = null;
-    // let xhrProfileData = new XMLHttpRequest();
-    // xhrProfileData.addEventListener("readystatechange", function () {
-    //   if (this.readyState === 4) {
-    //      let check_finalProfileData=JSON.parse(this.responseText);
-    //     console.log("check_finalProfileData",check_finalProfileData);
-    //     //this.setState({profileData: check_finalProfileData});
-    //   }
-    // })
-
-    // xhrProfileData.open("GET", "https://api.instagram.com/v1/users/self/media/recent?access_token=8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
-    // xhrProfileData.send(dataProfileData);
-
-    //console.log(this.state.profileData);
     this.getUserInfo()
     this.getProfile()
   }
@@ -126,7 +189,7 @@ class Profile extends Component {
                 <div  className={styles.root}>
                     <Grid container spacing={8}>
                         <Grid item xs={3}>
-                        <Paper className={styles.paper}><Avatar alt="Remy Sharp" src="https://scontent.cdninstagram.com/vp/1f77cead77f0c22685ceca9f2765911a/5D97A317/t51.2885-19/s150x150/41947221_725500971134637_2241518422187835392_n.jpg?_nc_ht=scontent.cdninstagram.com" className={styles.bigAvatar} /></Paper>
+                        <Paper className={styles.paper}><Avatar alt="Remy Sharp" src={this.state.userInfo.profile_picture} className={styles.bigAvatar} /></Paper>
                         </Grid>
                         <Grid item xs={8}   >
                         <Paper className={styles.paper}>
@@ -145,14 +208,20 @@ class Profile extends Component {
                     <GridList cellHeight={200} className={styles.gridList} cols={3}>
                     {this.state.profileData.map(profile => (
                       <GridListTile key={profile.id} cols={1}>
-                        <img src={profile.images.standard_resolution.url} alt={profile.caption.text} />
+                        <img src={profile.images.standard_resolution.url} alt={profile.caption.text} onClick={() => this.handleClickOpen(profile)} />
                       </GridListTile>
                     ))}
                   </GridList>
                 </div>
                 </Container>
               </React.Fragment>
-
+              <Modal ariaHideApp={false} isOpen={this.state.detailsModalIsOpen} 
+              onRequestClose={this.handleClose}  >
+             
+                <ImageDetailsSection currentPostData={this.state.currentPost}/>
+              
+              
+      </Modal>
             </div>
 
         )

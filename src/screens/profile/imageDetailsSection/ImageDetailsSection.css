@@ -1,0 +1,27 @@
+.flex-postDetailsContainer{
+    display:flex;
+    margin-top:24px;
+    margin-bottom:24px;
+}
+.profileImage{
+    height:50px;
+    width:50px;
+    border-radius: 25px;
+}
+.flex-userDataContainer{
+    display:flex;
+}
+.left{
+    width:50%;
+}
+.right{
+width: 50%;
+padding: 10px;
+margin-left:120px;
+}
+.profileImage{
+    margin-right:10px;
+}
+.hashTags{
+    color:#8696FF;
+}

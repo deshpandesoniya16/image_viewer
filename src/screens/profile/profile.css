@@ -16,15 +16,29 @@
     background-color: #fafafa;
 }
 
+.smallDp{
+    width: 79px !important;
+    height: 82px !important;
+}
+
 .MuiPaper-elevation1{
     box-shadow: none !important;
 }
-
-
+ .modalupdate{
+   width: 100%  !important;
+} 
+/* .MuiDialogContent-root{
+    display: flex;
+    flex-direction: row;
+} */
 .profile_name {
     margin-top: 5%;
     font-size: 25px;
     font-weight: 500;
+}
+
+.paper{
+    
 }
 
 .app-logo {
