@@ -36,7 +36,6 @@ componentWillMount(){
       likes:this.props.currentPostData.likes.count
 
     })
-    console.log(this.state.standard_resolution);
 }
 
    createComment=(e)=>{
@@ -49,7 +48,6 @@ componentWillMount(){
    }
 
   likePicture = () => {
-    console.log(this.state.likeCount);
     this.setState({
       showFavorite: true,
       likeBool: true,
@@ -68,7 +66,6 @@ componentWillMount(){
        let comments= this.state.comments;
        let likes = this.state.likes;
        let finalLikes;
-       console.log(finalLikes);
        if (this.state.likeBool) {
          finalLikes = likes;
          finalLikes = finalLikes + 1;
@@ -96,11 +93,11 @@ componentWillMount(){
                         <br />
                         
                         <div>
-                            <Typography variant="subheading">  {this.state.caption}</Typography>         
+                            <Typography variant="subtitle1">  {this.state.caption}</Typography>         
                         </div>
                     
                         <div>{this.state.tags.map((tag)=>(
-                            <span className="hashTags">{"#"+tag+" "}</span>
+                            <span  key={tag} className="hashTags">{"#"+tag+" "}</span>
                         ))}
                         </div>  
                         {/* adding the new comments*/}  
@@ -109,7 +106,7 @@ componentWillMount(){
             
                         <div style={{marginBottom:'100px'}}>
                         {comments.map((comment)=>(
-                           <p><strong>{this.state.username+ ": "}</strong>{comment}</p>
+                           <p key={comment} ><strong>{this.state.username+ ": "}</strong>{comment}</p>
                         ))}
                         </div>
                         {/* adding the like and comment components*/}

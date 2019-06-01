@@ -7,21 +7,19 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import './profile.css';
 import Paper from '@material-ui/core/Paper';
-// import Box from '@material-ui/core/Box';
-// import Button from '@material-ui/core/Button';
-// import profiledata from '../../common/profile_data';
+import Button from '@material-ui/core/Button'
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import { withStyles } from '@material-ui/core/styles';
-// import Button from '@material-ui/core/Button';
-// import Dialog from '@material-ui/core/Dialog';
-// import MuiDialogTitle from '@material-ui/core/DialogTitle';
-// import MuiDialogContent from '@material-ui/core/DialogContent';
-// // import MuiDialogActions from '@material-ui/core/DialogActions';
-// import IconButton from '@material-ui/core/IconButton';
-// import CloseIcon from '@material-ui/icons/Close';
 import Modal from 'react-modal';
-import ImageDetailsSection from './imageDetailsSection/ImageDetailsSection'
+import ImageDetailsSection from './imageDetailsSection/ImageDetailsSection';
+import Fab from '@material-ui/core/Fab';
+import EditIcon from '@material-ui/icons/Edit';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import PropTypes from 'prop-types';
+
 
 const styles = theme => ({
     root: {
@@ -49,51 +47,32 @@ const styles = theme => ({
         top: theme.spacing(1),
         color: theme.palette.grey[500],
       },
-      // smallDp: {
-      //   width: 79px,
-      //   height: 82px,
-      //  },
   });
-  // const styles = theme => ({
-  //   root: {
-  //     margin: 0,
-  //     padding: theme.spacing(2),
-  //   },
-  //   closeButton: {
-  //     position: 'absolute',
-  //     right: theme.spacing(1),
-  //     top: theme.spacing(1),
-  //     color: theme.palette.grey[500],
-  //   },
-  // });
-  
-  // const DialogTitle = withStyles(styles)(props => {
-  //   const { children, classes, onClose } = props;
-  //   return (
-  //     <MuiDialogTitle disableTypography className={classes.root}>
-  //       <Typography variant="h6">{children}</Typography>
-  //       {onClose ? (
-  //         <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
-  //           <CloseIcon />
-  //         </IconButton>
-  //       ) : null}
-  //     </MuiDialogTitle>
-  //   );
-  // });
-  
-  // const DialogContent = withStyles(theme => ({
-  //   root: {
-  //     padding: theme.spacing(2),
-  //   },
-  // }))(MuiDialogContent);
-  
-  // const DialogActions = withStyles(theme => ({
-  //   root: {
-  //     margin: 0,
-  //     padding: theme.spacing(1),
-  //   },
-  // }))(MuiDialogActions);
-
+  const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)'
+    },
+    gridListMedia:{
+        flexWrap:"nowrap",
+        transform:'translateZ(0)',
+        width:'100%'
+    }
+};
+const TabContainer = function(props){
+  return(
+      <Typography component="div" style={{ padding: 0}}>
+      {props.children}
+      </Typography>
+  );
+}
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired
+}
 
 class Profile extends Component {
 
@@ -102,43 +81,47 @@ class Profile extends Component {
 
     this.state = {
       userInfo: [],
+      full_name:'',
       profileData: [],
       checkprofileData: [],
       media:'',
       follows:'',
       follow_by:'',
-      select_image:'',
-      select_image_text:'',
-      select_image_tags:'',
-      select_image_likes:'',
       currentPost:'',
       open: false,
-      detailsModalIsOpen: false
+      detailsModalIsOpen: false,
+      editModalIsOpen:false,
+      editedFullName:"",
+      editedFullNameRequired: "dispNone"
     }
   }
 
 
   handleClickOpen = (selectedId) => {
     this.setState({detailsModalIsOpen:true});
-    // let selectedPicData = [];
-    // for (let star of this.state.profileData) {
-    //     if (star.id === selectedId) {
-    //       selectedPicData.push(star.images);   
-    //       selectedPicData.push(star.caption);   
-    //       selectedPicData.push(star.likes);   
-    //       selectedPicData.push(star.tags);        
-    //     }        
-    // }
-    // this.setState({ select_image : selectedPicData[0].standard_resolution});
-    // this.setState({ select_image_text : selectedPicData[1]});
-    // this.setState({ select_image_tags : selectedPicData[2]});
-    // this.setState({ select_image_likes : selectedPicData[3]});
     this.setState({ currentPost : selectedId});
   };
 
   handleClose = () => {
     this.setState({ detailsModalIsOpen: false });
   };
+
+
+    
+openEditModalHandler=()=>{
+    this.setState({editModalIsOpen:true});
+}
+closeEditModalHandler=()=>{
+    this.setState({editModalIsOpen:false,editedFullNameRequired: "dispNone"});
+}
+editedFullNameChangeHandler=(e)=>{
+   this.setState({editedFullName:e.target.value});
+}
+editFullNameHandler=()=>{
+    let editedName = this.state.editedFullName;
+    
+    editedName===""? this.setState({editedFullNameRequired:"dispBlock"}):this.setState({editedFullNameRequired:"dispNone",full_name: editedName, editedFullName:"",editModalIsOpen:false,});
+}
 
   componentWillMount() {
     this.getUserInfo()
@@ -156,8 +139,8 @@ class Profile extends Component {
       })
       .then(data => {
         this.setState({ userInfo : data.data})
-        // console.log("check_log",this.state.userInfo.counts.follows)
         this.setState({ media : this.state.userInfo.counts.media})
+        this.setState({ full_name : this.state.userInfo.full_name})
         this.setState({ follows : this.state.userInfo.counts.follows})
         this.setState({ follow_by : this.state.userInfo.counts.followed_by})
       })
@@ -201,7 +184,8 @@ class Profile extends Component {
                             Posts: {this.state.media} Follows: {this.state.follows} Followed By: {this.state.follow_by}
                           </Typography>
                           <Typography variant="body2" gutterBottom>
-                          {this.state.userInfo.full_name}
+                          {this.state.full_name}
+                          <Fab color="secondary" className='editButton' onClick={this.openEditModalHandler} aria-label="Edit"><EditIcon/></Fab> 
                           </Typography>
                         </Grid>
                     </Grid>
@@ -217,11 +201,23 @@ class Profile extends Component {
               </React.Fragment>
               <Modal ariaHideApp={false} isOpen={this.state.detailsModalIsOpen} 
               onRequestClose={this.handleClose}  >
-             
-                <ImageDetailsSection currentPostData={this.state.currentPost}/>
-              
-              
-      </Modal>
+               <ImageDetailsSection currentPostData={this.state.currentPost}/>
+              </Modal>
+              <Modal ariaHideApp={false} isOpen={this.state.editModalIsOpen}
+                onRequestClose={this.closeEditModalHandler} style={customStyles}>
+                <strong  style={{fontSize: 20,fontWeight: 'bold'}}>Edit</strong>
+                  <TabContainer>
+                      <FormControl required>
+                          <InputLabel htmlFor="fullName">Full Name</InputLabel>
+                          <Input id="fullName" type="text"  onChange={this.editedFullNameChangeHandler}/>
+                          <FormHelperText className={this.state.editedFullNameRequired}>
+                          <span className="red">required</span>
+                          </FormHelperText>
+                      </FormControl><br/>
+                      <Button variant="contained" style={{backgroundColor: '#5B00BB',color:"#FFFFFF",marginTop:'10px'}} onClick={this.editFullNameHandler}>UPDATE</Button>
+                  </TabContainer>            
+                
+                </Modal>
             </div>
 
         )

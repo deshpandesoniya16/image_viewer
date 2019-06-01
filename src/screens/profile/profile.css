@@ -37,8 +37,10 @@
     font-weight: 500;
 }
 
-.paper{
-    
+.editButton{
+    margin-left: 2% !important; 
+    width: 39px !important; 
+    height: 32px !important; 
 }
 
 .app-logo {
