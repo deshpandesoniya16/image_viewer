@@ -1,0 +1,17 @@
+/* StyleSheet For Home */
+.hashTags {
+  color: blue;
+}
+.redLike {
+  color: red;
+  cursor: pointer;
+}
+.greyLike {
+  color: grey;
+  cursor: pointer;
+}
+
+.post-item {
+  max-width: 100%;
+  padding: 22px;
+}
